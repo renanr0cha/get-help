@@ -13,7 +13,7 @@ export function Button({ title, ...rest }: Props) {
       _pressed={{ bg: "green.500"}}
       {...rest}
     >
-      <Heading color="white" fontSize="xl">Entrar</Heading>
+      <Heading color="white" fontSize="xl">{title}</Heading>
     </ButtonNativeBase>
   );
 }
