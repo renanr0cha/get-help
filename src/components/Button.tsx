@@ -9,12 +9,11 @@ export function Button({ title, ...rest }: Props) {
     <ButtonNativeBase
       bg={"green.700"}
       h={14}
-      fontSize="sm"
-      rounded="sm"
+      rounded="xl"
       _pressed={{ bg: "green.500"}}
       {...rest}
     >
-      <Heading color="white" fontSize="sm">Entrar</Heading>
+      <Heading color="white" fontSize="xl">Entrar</Heading>
     </ButtonNativeBase>
   );
 }
