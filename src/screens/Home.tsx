@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigation } from "@react-navigation/native"
 import { HStack, IconButton, Text, useTheme, VStack, Heading, FlatList, Center } from 'native-base';
 import { SignOut, ChatTeardropText } from 'phosphor-react-native';
 
@@ -11,40 +12,50 @@ import { Button } from "../components/Button";
 export function Home() {
   const [statusSelected, setStatusSelected] = useState<"open" | "closed">("open")
   const [orders, setOrders] = useState<OrderProps[]>([
-    // {
-    //   id: "123",
-    //   patrimony: "123456",
-    //   when: "18/07/2022 às 10:00",
-    //   status: "open"
-    // },
-    // {
-    //   id: "34",
-    //   patrimony: "123456",
-    //   when: "18/07/2022 às 10:00",
-    //   status: "open"
-    // },
-    // {
-    //   id: "14",
-    //   patrimony: "123456",
-    //   when: "18/07/2022 às 10:00",
-    //   status: "open"
-    // },
-    // {
-    //   id: "23",
-    //   patrimony: "123456",
-    //   when: "18/07/2022 às 10:00",
-    //   status: "open"
-    // },
-    // {
-    //   id: "22",
-    //   patrimony: "123456",
-    //   when: "18/07/2022 às 10:00",
-    //   status: "open"
-    // },
+    {
+      id: "123",
+      patrimony: "38573",
+      when: "18/07/2022 às 10:00",
+      status: "open"
+    },
+    {
+      id: "34",
+      patrimony: "29586",
+      when: "18/07/2022 às 10:00",
+      status: "closed"
+    },
+    {
+      id: "14",
+      patrimony: "2259",
+      when: "18/07/2022 às 10:00",
+      status: "closed"
+    },
+    {
+      id: "23",
+      patrimony: "9925",
+      when: "18/07/2022 às 10:00",
+      status: "open"
+    },
+    {
+      id: "22",
+      patrimony: "284639",
+      when: "18/07/2022 às 10:00",
+      status: "open"
+    },
       
 ])
 
+  const navigation = useNavigation()
+
   const { colors } = useTheme()
+
+  function handleNewOrder(){
+    navigation.navigate("new")
+  }
+
+  function handleOpenDetails( orderId: string ){
+    navigation.navigate("details", { orderId })
+  }
 
   return (
     <VStack flex={1} pb={6} bg="gray.700">
@@ -95,7 +106,7 @@ export function Home() {
         <FlatList
           data={orders}
           keyExtractor={item => item.id}
-          renderItem={({ item }) => <Order data={item} />}
+          renderItem={({ item }) => <Order data={item} onPress={() => handleOpenDetails(item.id)}/>}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 60}}
           ListEmptyComponent={() => (
@@ -109,7 +120,7 @@ export function Home() {
           )}
         />
 
-        <Button title="Nova solicitação" />
+        <Button title="Nova solicitação" onPress={handleNewOrder}/>
       </VStack>
 
       
