@@ -5,7 +5,7 @@ import { THEME } from "./src/styles/theme"
 
 import { Loading } from './src/components/Loading';
 import { Input } from './src/components/Input';
-import { Register } from './src/screens/Register';
+import { Details } from './src/screens/Details';
 
 
 export default function App() {
@@ -17,7 +17,7 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      { fontsLoaded ? <Register /> : <Loading/>}
+      { fontsLoaded ? <Details /> : <Loading/>}
     </NativeBaseProvider>
   );
 }
