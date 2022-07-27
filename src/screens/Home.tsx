@@ -1,51 +1,25 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import auth from "@react-native-firebase/auth"
+import firestore from "@react-native-firebase/firestore"
 import { Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { HStack, IconButton, Text, useTheme, VStack, Heading, FlatList, Center } from 'native-base';
 import { SignOut, ChatTeardropText } from 'phosphor-react-native';
 
+import { dateFormat } from "../utils/firestoreDateFormat"
+
 import Logo from "../assets/logo_secondary.svg"
 import { Filter } from '../components/Filter';
 import { Order, OrderProps } from "../components/Order";
 import { Button } from "../components/Button";
+import { Loading } from "../components/Loading"
 
 
 export function Home() {
   const [statusSelected, setStatusSelected] = useState<"open" | "closed">("open")
-  const [orders, setOrders] = useState<OrderProps[]>([
-    {
-      id: "123",
-      patrimony: "38573",
-      when: "18/07/2022 às 10:00",
-      status: "open"
-    },
-    {
-      id: "34",
-      patrimony: "29586",
-      when: "18/07/2022 às 10:00",
-      status: "closed"
-    },
-    {
-      id: "14",
-      patrimony: "2259",
-      when: "18/07/2022 às 10:00",
-      status: "closed"
-    },
-    {
-      id: "23",
-      patrimony: "9925",
-      when: "18/07/2022 às 10:00",
-      status: "open"
-    },
-    {
-      id: "22",
-      patrimony: "284639",
-      when: "18/07/2022 às 10:00",
-      status: "open"
-    },
-      
-])
+  const [orders, setOrders] = useState<OrderProps[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
 
   const navigation = useNavigation()
 
@@ -68,6 +42,30 @@ export function Home() {
       })
   }
 
+  useEffect(() => {
+    setIsLoading(true)
+
+    const subscriber = firestore()
+    .collection("orders")
+    .where("status", "==", statusSelected)
+    .onSnapshot(snapshot => {
+      const data = snapshot.docs.map(doc => {
+        const { patrimony, description, status, created_at } = doc.data()
+
+        return {
+          id: doc.id,
+          patrimony,
+          description,
+          status,
+          when: dateFormat(created_at),
+        }
+      })
+      setOrders(data)
+      setIsLoading(false)
+    })
+
+    return subscriber
+  }, [statusSelected])
   return (
     <VStack flex={1} pb={6} bg="gray.700">
       <HStack
@@ -115,7 +113,9 @@ export function Home() {
         />
         </HStack>
 
-        <FlatList
+        {
+          isLoading ? <Loading /> :
+          <FlatList
           data={orders}
           keyExtractor={item => item.id}
           renderItem={({ item }) => <Order data={item} onPress={() => handleOpenDetails(item.id)}/>}
@@ -130,7 +130,7 @@ export function Home() {
               </Text>
             </Center>
           )}
-        />
+        />}
 
         <Button title="Nova solicitação" onPress={handleNewOrder}/>
       </VStack>
