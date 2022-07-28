@@ -1,4 +1,4 @@
-import { VStack } from 'native-base';
+import { Box, VStack } from 'native-base';
 import { useState } from 'react';
 import { Header } from '../components/Header';
 import { useNavigation } from '@react-navigation/native';
@@ -41,9 +41,10 @@ export function Register() {
       return Alert.alert("Solicitação", "Não foi possível registrar o pedido.")
     })
   }
+  
   return (
     <VStack flex={1} p={6} bg="gray.600">
-      <Header title='Nova solicitação'/>
+        <Header title='Nova solicitação'/>
 
 
       <Input
@@ -66,6 +67,7 @@ export function Register() {
         mt={5}
         onPress={handleNewOrder}
         isLoading={isLoading}
+
       />
     </VStack>
   );

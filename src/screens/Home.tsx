@@ -50,7 +50,7 @@ export function Home() {
     .where("status", "==", statusSelected)
     .onSnapshot(snapshot => {
       const data = snapshot.docs.map(doc => {
-        const { patrimony, description, status, created_at } = doc.data()
+        const { patrimony, description, status, created_at, solution, closed_at } = doc.data()
 
         return {
           id: doc.id,
@@ -58,6 +58,8 @@ export function Home() {
           description,
           status,
           when: dateFormat(created_at),
+          solution,
+          closed: dateFormat(closed_at)
         }
       })
       setOrders(data)
@@ -90,10 +92,10 @@ export function Home() {
       <VStack flex={1} px={6}>
         <HStack w="full" mt={8} mb={4} justifyContent="space-between" alignItems="center">
           <Heading color="gray.100">
-            Meus chamados
+            Solicitações
           </Heading>
           <Text color="gray.200">
-            3
+            {orders.length}
           </Text>
 
         </HStack>
@@ -126,7 +128,7 @@ export function Home() {
             <Center>
               <ChatTeardropText color={colors.gray[300]} size={40}/>
               <Text color="gray.300" fontSize="xl" mt={6} textAlign="center">
-                Você ainda não possui {'\n'}
+                Você não possui {'\n'}
                 solicitações {statusSelected === "open" ? "em andamento" : "finalizadas"}
               </Text>
             </Center>

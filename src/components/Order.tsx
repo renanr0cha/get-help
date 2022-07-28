@@ -5,7 +5,9 @@ export type OrderProps = {
   id: string,
   patrimony: string,
   when: string,
-  status: "open" | "closed"
+  status: "open" | "closed",
+  solution?: string,
+  closed?: string
 }
 
 type Props = IPressableProps & {
@@ -41,7 +43,7 @@ export function Order({ data, ...rest}: Props) {
           <HStack alignItems="center">
             <ClockAfternoon size={15} color={colors.gray[300]} />
             <Text color="gray.200" fontSize="xs" ml={1}>
-              {data.when}
+              {!!data.solution ? data.closed : data.when}
             </Text>
           </HStack>
         </VStack>
